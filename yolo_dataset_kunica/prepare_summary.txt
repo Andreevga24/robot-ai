@@ -1,0 +1,6 @@
+json_files: 101
+kept: 101
+skipped_empty_or_invalid: 0
+missing_images: 0
+total_shapes_seen: 102
+output: D:\robot-ai\yolo_dataset_kunica

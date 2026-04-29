@@ -1,0 +1,6 @@
+json_files: 188
+kept: 188
+skipped_empty_or_invalid: 0
+missing_images: 0
+total_shapes_seen: 283
+output: D:\robot-ai\yolo_dataset

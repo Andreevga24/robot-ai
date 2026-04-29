@@ -1,0 +1,4 @@
+path: yolo_dataset_kunica
+train: images/train
+val: images/val
+names: ['marten']
