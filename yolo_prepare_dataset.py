@@ -97,6 +97,43 @@ def write_data_yaml(out_dir: Path, class_names: list[str]) -> None:
     )
 
 
+def write_darknet_files(out_dir: Path, class_names: list[str]) -> None:
+    """
+    Emit the classic YOLOv1/Darknet training files:
+    - obj.names: class names (one per line)
+    - obj.data: metadata pointing to train/val lists and names
+    - train.txt / val.txt: absolute image paths (one per line)
+    """
+    (out_dir / "obj.names").write_text("\n".join(class_names) + "\n", encoding="utf-8")
+
+    train_images_dir = (out_dir / "images" / "train").resolve()
+    val_images_dir = (out_dir / "images" / "val").resolve()
+
+    def list_images(d: Path) -> list[Path]:
+        exts = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
+        return sorted([p for p in d.iterdir() if p.is_file() and p.suffix.lower() in exts])
+
+    train_list = [p.resolve().as_posix() for p in list_images(train_images_dir)]
+    val_list = [p.resolve().as_posix() for p in list_images(val_images_dir)]
+
+    (out_dir / "train.txt").write_text("\n".join(train_list) + ("\n" if train_list else ""), encoding="utf-8")
+    (out_dir / "val.txt").write_text("\n".join(val_list) + ("\n" if val_list else ""), encoding="utf-8")
+
+    (out_dir / "obj.data").write_text(
+        "\n".join(
+            [
+                f"classes = {len(class_names)}",
+                f"train = {(out_dir / 'train.txt').resolve().as_posix()}",
+                f"valid = {(out_dir / 'val.txt').resolve().as_posix()}",
+                f"names = {(out_dir / 'obj.names').resolve().as_posix()}",
+                f"backup = {(out_dir / 'backup').resolve().as_posix()}",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+
 def discover_classes(json_files: list[Path]) -> list[str]:
     labels: set[str] = set()
     for jp in json_files:
@@ -125,6 +162,11 @@ def main() -> int:
         action="store_true",
         help="Copy images into output folder. If not set, images are not copied.",
     )
+    ap.add_argument(
+        "--darknet",
+        action="store_true",
+        help="Also write YOLOv1/Darknet files: train.txt/val.txt/obj.names/obj.data",
+    )
     args = ap.parse_args()
 
     src_dir = Path(args.src)
@@ -134,7 +176,8 @@ def main() -> int:
     out_labels_train = out_dir / "labels" / "train"
     out_labels_val = out_dir / "labels" / "val"
 
-    json_files = sorted(src_dir.glob("*.json"))
+    # LabelMe exports are often nested by class/folder; include all JSONs recursively.
+    json_files = sorted(src_dir.rglob("*.json"))
     if not json_files:
         raise SystemExit(f"No .json files found in {src_dir.resolve()}")
 
@@ -197,6 +240,9 @@ def main() -> int:
         kept += 1
 
     write_data_yaml(out_dir, class_names)
+    if args.darknet:
+        (out_dir / "backup").mkdir(parents=True, exist_ok=True)
+        write_darknet_files(out_dir, class_names)
 
     summary = [
         f"json_files: {len(json_files)}",
@@ -211,6 +257,8 @@ def main() -> int:
         (out_dir / "missing_images.txt").write_text("\n".join(missing_images) + "\n", encoding="utf-8")
 
     print("\n".join(summary))
+    print("\nclasses:")
+    print("\n".join([f"- {n}" for n in class_names]))
     if missing_images:
         print(f"\nMissing images list written to: {(out_dir / 'missing_images.txt').resolve()}")
         print(

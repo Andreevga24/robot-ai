@@ -1,0 +1,87 @@
+D:/robot-ai/yolo_dataset_yolov1/images/val/05fa57874a.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/0e7ce42fd2.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/12312i.webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/15_jpg.rf.68d07c66e276b17668641e7746fe3d39.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/1661079691_india-lumpy-disease1660851739-0_jpg.rf.2cb5e70afd694eaf9667ac70eddde5d9.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/16_jpg.rf.b3b0a484bb4c0927b801f17021019bd5.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/27_jpg.rf.29646892c78164b616d9931bfffbb55a.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/365b582c58.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/443e0ad4e7.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/47d8f719cb.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/573b1b0393.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/5f01c34451.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/6e61499ab8.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/7b04dad848.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/9a059979c1.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/Bovine-affected-by-lumpy-skin-disease_jpg.rf.5e000b214b7f87e0bb5886f8ac981e87.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/FB_IMG_1662698179703_jpg.rf.6c032fd8fc78d387f789c7b6cba31435.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/file_000000000a5071f4868d65c984ae7795-1200x800.png
+D:/robot-ai/yolo_dataset_yolov1/images/val/hen-sitting_191971-8126.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (1).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (10).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (14).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (15).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (16).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (19).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (2).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (21).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (22).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (24).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (26).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (3).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (31).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (32).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (34).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (37).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (39).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (40).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (41).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (42).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (44).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (47).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (48).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (5).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (51).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (52).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (53).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (57).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (58).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (59).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (6).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (65).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (71).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (73).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (74).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (76).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (78).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (79).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (82).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (83).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (84).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (85).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (86).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (89).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (91).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (92).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (93).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (95).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (96).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i (98).webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/i.webp
+D:/robot-ai/yolo_dataset_yolov1/images/val/images (1).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/val/images (20).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/val/images-_9_.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/img1197.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/IMG_20220829_124417_jpg.rf.0a3e02972f58397688545e68bf03ee47.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/IMG_20220829_124626_jpg.rf.0f840ddffd52300d8885fef5f010bcdf.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/IMG_20220830_105903_jpg.rf.a240b524de9b891c8d0c9b5747b4ffb5.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/istockphoto-1930591987-612x612.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/photorealistic-view-rooster-with-beak-feathers_23-2151569820.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/realistic-chicken-white-background_1249867-8458.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/val/Без названия (16).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/val/Без названия (17).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/val/Без названия (3).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/val/Без названия (4).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/val/Без названия (6).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/val/Без названия (8).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/val/Без-названия.jpg

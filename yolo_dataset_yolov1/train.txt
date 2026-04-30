@@ -1,0 +1,289 @@
+D:/robot-ai/yolo_dataset_yolov1/images/train/0387df115d.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/06e320f74d.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/06f39b80-1aee-4520-81b4-66a1cb541d5a.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/0dac8cc0bf.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/0db670ecbe.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/0e238d32f4.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/0eb7c96ef9.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/0f43a8237e.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/10_jpg.rf.47949fe28019fa10876ca316bf46b41e.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/10_jpg.rf.e3ffb69d621d07c9d144b189c5e2323b.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/11_jpg.rf.62c5f74e585caa97963761ff1f123a6c.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/11_jpg.rf.bffe677f883d9996654d583861e9a520.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/11fcc2d565.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/12312i.webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/14_jpg.rf.1fcea11523f5cc0bcccb1519ef0a79fc.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/15eebd79cb.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/17_jpg.rf.864a5f6eb2004281c0927a1307fa4e48.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/1a4ffd8af3.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/1e6019d07d.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/26_jpg.rf.838622caee34132c1c2bbb73eb73b45a.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/277c434994.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/27bcfb5fec.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/29_jpg.rf.bb7d7e966ecca721dd2d95f9ccc2e0dc.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/2a1a8a7e14.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/34bd22f913.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/352ef543bf.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/3b2e27503f.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/3b448618eb.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/3e6d5f5ded.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/3ee1588420.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/3fd4f4b272.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/40_jpg.rf.3b611e3c5be2d420deef674b48e52784.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/432cfb1258.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/49a0c85b3b.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/4_jpg.rf.c6e557d31d3192a6b314a31cf0ec8c9d.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/4c30af6ca762faf07aaa0206f0d8c008.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/54d9910572.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/55c94eb8c6.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/580f62e0f1.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/58eac1d1a1.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/5aa817b12f.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/5e589e73ec.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/5е57.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/6_jpg.rf.d46c211366112de9b9ee5cc3340224d5.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/6b1295488f.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/6d01eb24e1.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/6f8cb24654.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/70_jpg.rf.396d4248fcb300302a7358b9343a4e78.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/719c8bf8-5459-4674-8ee2-ee0c224bbc05.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/7b1b59b5a5.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/7fd7fe81cf.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/81_jpg.rf.f1df622a1710921e8574ff9fb5557cc5.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/843e6810e0.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/85d7b35232.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/87_jpg.rf.b94a4d2286d59260a876f119f29ec8eb.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/8_jpg.rf.2af5f57cfa748814f1692c3df49f15a7.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/93_jpg.rf.6a5cb8fed6a08891e8d260211e67c719.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/98e5a29f90.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/9aaeb59193.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/9c3db9d85d.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/9cdcad3179.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/ai-generated-chicken-picture_23-2150653721.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/ai-generated-chicken-picture_23-2150653753.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/ai-generated-chicken-picture_23-2150653855.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/ai-generated-chicken-picture_23-2150653917.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/cf8b51c2fd43f279462856becaa87de0.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/close-up-beautiful-chicken_23-2150741683.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/close-up-beautiful-chicken_23-2150741723.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/close-up-beautiful-chickens_23-2150741833.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/e7f0957f3d66d5d2bea38e8023905b25.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/fa296e8993023f41e9c022a6fc16db29.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/FB_IMG_1662698173191_jpg.rf.57d24738e11a2eb7acc69503a66a5632.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/FB_IMG_1662698182041_jpg.rf.a276f3588cca3efe4a1015c5d985b5d4.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/FB_IMG_1662698194054_jpg.rf.70145abec9328056fc2c356501ec71d1.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/fears-of-lumpy-skin-di_jpg.rf.ae480bec3acf1f0e13d694f4129d536e.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/ff3a437d2c34459ea35e6f5137b8149f.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Gallery_1661886056242_jpg.rf.7517b791c3c4eb9cbd96deb45034cd58.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (1).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (10).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (100).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (11).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (12).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (13).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (14).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (15).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (16).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (17).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (18).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (19).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (2).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (20).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (21).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (22).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (23).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (24).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (25).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (26).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (27).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (28).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (29).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (3).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (30).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (31).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (32).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (33).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (34).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (35).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (36).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (37).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (38).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (39).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (4).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (40).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (41).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (42).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (43).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (44).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (45).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (46).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (47).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (48).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (49).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (5).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (50).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (51).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (52).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (53).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (54).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (55).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (56).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (57).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (58).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (59).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (6).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (60).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (61).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (62).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (63).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (64).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (65).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (66).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (67).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (68).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (69).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (7).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (70).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (71).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (72).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (73).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (74).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (75).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (76).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (77).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (78).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (79).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (8).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (80).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (81).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (82).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (83).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (84).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (85).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (86).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (87).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (88).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (89).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (9).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (90).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (91).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (92).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (93).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (94).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (95).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (96).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (97).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (98).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i (99).webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i - 2026-04-29T151514.146.webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/i.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (10).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (11).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (12).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (13).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (14).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (15).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (16).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (17).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (19).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (2).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (21).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (22).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (23).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (24).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (25).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (26).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (27).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (28).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (29).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (3).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (4).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (5).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (6).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (7).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (8).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images (9).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images-_10_.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images-_11_.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images-_6_.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images-_7_.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images-_8_.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/images_jpg.rf.66348cc74a8ff748bf3d5f260eabb63f.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0049_jpg.rf.b7b6b51d30e7c66191edf52f9e1e6172.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0050_jpg.rf.383e7b246a0349f835a21b3e8d51ceea.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0050_jpg.rf.d6907481428a7e0d5280f2f7691348cb.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0053_jpg.rf.a75d9a15051f7f0b8c05c959faee1965.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0065_jpg.rf.2d72cd0ea554569e732ef9aff65edc88.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0068_jpg.rf.30c1843b7835764bb880638fbb0fc642.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0074_jpg.rf.3fdbcdd46c4131dc85483bebb92d94b0.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0075_jpg.rf.66ab1464817a9a3049d98ec16d0edf40.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0079_jpg.rf.80ba57d202c4dcc90f9bff0840d6cdfa.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0112_jpg.rf.a986b9fa32c960c3d1f57b240292a2f1.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0125_jpg.rf.5e6fc6b3d6bfc7bbc50c450114021b29.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0127_jpg.rf.adbdcdab583602ae8b903ee51833c0c5.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG-20220830-WA0164_jpg.rf.2f49c1f7957f7bc8ee8d1682605e7a38.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/img1183_jpg.rf.2af3b992319a8fd2bcd0583daa1d6fad.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/img1199.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/img1265.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/img1283.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/img1292(1).jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/img1300.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/img1336.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/img1339.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/img1367.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/img1370.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220829_124341_jpg.rf.c4c20d1a362b12f5f511e9e21b472d8f.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220829_124417_jpg.rf.7a6aa562677956a3d89513420f0d0877.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220829_130241_jpg.rf.48f79c9d7334c4ba79a9369ee9807b09.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_075746_jpg.rf.5b88fa5cf5a028983b15cbface128727.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_075803_jpg.rf.d557e670ce03693ddcff955a495341df.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_075845_jpg.rf.33d09c54d68fd18abbb2d19e5016a5d2.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_075854_jpg.rf.34007dd888b4884a0738b790b5fee9de.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_080456_jpg.rf.bce64e5ba0c56a9e17545fc48973c2b0.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_081138_jpg.rf.39b095c25e2c421ad8b4ea8b76a5029e.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_081145_jpg.rf.57eb2fe8de3e774b5a9ab49c75c7f245.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_081329_jpg.rf.ae67c758abcd169b90cd7e65caf61c1f.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_081529_jpg.rf.d318b157dc9c5ff9348e150e58dfc59f.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_081529_jpg.rf.de88277428f667c250c0044986026055.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_102711_jpg.rf.6f0efccc8cf11ac1bcaa4a34567830b5.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_103804_jpg.rf.33a7dde93319741e7c0511a8ae4ecdb4.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_103804_jpg.rf.f95d4d99d7a31dfe751d1e758cb58ce7.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_105002_jpg.rf.da14dc146d57b776f02e8174fe595fe1.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_110005_jpg.rf.149c87d28fe9c69f2ff992be702f01fa.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_110005_jpg.rf.e2c346c25a6fe0802721d99ab8b41e73.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_110059_jpg.rf.25d5869604a4c081a27300cd761f21bb.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220830_120622_jpg.rf.60ea6a6adcf70b6be23cf195a9a030e2.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/IMG_20220907_184051_jpg.rf.290759e54764206d171cd3a0dc22fbb0.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/istockphoto-1930591987-1024x1024.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/kohinhiny.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/kury-768x512.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Martes_martes_crop_(cropped).jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Pine_Marten_(48941946582).jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/resize.webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/rooster-stands-farm-looking-camera-generated-by-artificial-intelligence_188544-129682.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Stocking-Density-Broiler-Behaviour-1024x574.webp
+D:/robot-ai/yolo_dataset_yolov1/images/train/three-brown-chickens-with-white-isolated-background_634022-2408.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/young-bird-looking-cute-chicken-coop-farm-generated-by-artificial-intelligence_188544-113334.jpg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (1).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (10).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (11).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (12).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (13).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (15).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (18).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (19).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (2).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (20).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (21).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (22).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (3).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (4).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (5).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (6).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (7).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (8).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия (9).jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия.jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Без названия4.jpeg
+D:/robot-ai/yolo_dataset_yolov1/images/train/Павловская_порода_кур.jpg

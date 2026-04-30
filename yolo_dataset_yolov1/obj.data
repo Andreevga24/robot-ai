@@ -1,0 +1,5 @@
+classes = 9
+train = D:/robot-ai/yolo_dataset_yolov1/train.txt
+valid = D:/robot-ai/yolo_dataset_yolov1/val.txt
+names = D:/robot-ai/yolo_dataset_yolov1/obj.names
+backup = D:/robot-ai/yolo_dataset_yolov1/backup

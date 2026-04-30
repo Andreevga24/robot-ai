@@ -1,0 +1,4 @@
+path: yolo_dataset_yolov1
+train: images/train
+val: images/val
+names: ['chicken', 'cow_lumpy', 'cow_wound', 'fox', 'marten', 'round hay', 'square hay', 'volf', 'wolf']
