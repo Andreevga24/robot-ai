@@ -32,6 +32,14 @@ py -m pip install -r requirements.txt
 py qt_serial_dashboard.py
 ```
 
+YOLO-детекция в панели (вкладка **Камера**):
+- По умолчанию используется `VISION_SOURCE="0"` (одна камера).
+- Модель берётся из `runs/detect/train/weights/best.pt` (см. `VISION_MODEL_PATH`).
+- Логика тревог:
+  - `fire` -> тревога **ПОЖАР (VISION)** (экран + звук).
+  - `fox|marten|volf|wolf` -> тревога **ХИЩНИК В ХЛЕВУ (VISION)** (экран + звук).
+  - `chicken` -> счётчик **CHICKEN: N** на текущем кадре (со сглаживанием).
+
 Важно: перед запуском закрой `Serial Monitor` / `Serial Plotter` в Arduino IDE, иначе COM-порт будет занят.
 
 ### 2) YOLO (подготовка + обучение + детекция)

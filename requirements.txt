@@ -2,4 +2,6 @@ pyserial
 matplotlib
 pyqtgraph
 PyQt6
+ultralytics
+opencv-python
 
