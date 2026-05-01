@@ -60,6 +60,27 @@ VISION_CONF_ALERT = 0.40
 VISION_CONF_CHICKEN = 0.30
 VISION_ALARM_HOLD_SECONDS = 0.40  # require persistence to reduce false positives
 
+# Vision anti-false-positive filters
+# - Class-specific confidence thresholds (override VISION_CONF_ALERT for counting/messages)
+VISION_CONF_BY_CLASS: dict[str, float] = {
+    "cow_lumpy": 0.65,
+    "sheep_wool": 0.55,
+    "corn": 0.55,
+    "round hay": 0.55,
+    "square hay": 0.55,
+}
+# - Minimum bbox area ratio (bbox_area / frame_area) per class for counting/messages
+VISION_MIN_AREA_RATIO_BY_CLASS: dict[str, float] = {
+    "cow_lumpy": 0.010,   # 1.0% of frame
+    "sheep_wool": 0.008,  # 0.8%
+    "corn": 0.004,        # 0.4%
+    "round hay": 0.010,   # 1.0%
+    "square hay": 0.010,  # 1.0%
+}
+# - Ignore detections too close to frame borders (often reflections / clutter)
+VISION_ROI_BORDER_FRAC_X = 0.02  # ignore 2% left/right
+VISION_ROI_BORDER_FRAC_Y = 0.02  # ignore 2% top/bottom
+
 # Stable chicken counting (simple tracker)
 VISION_CHICKEN_TRACK_MAX_DIST_PX = 80  # max centroid distance to match detections -> tracks
 VISION_CHICKEN_TRACK_MAX_MISSES = 8  # frames to keep track without detection
@@ -70,6 +91,21 @@ ALERTS_DIR = Path("runs/alerts")
 PREDATOR_CLASSES = {"fox", "marten", "wolf", "volf"}
 FIRE_CLASS = "fire"
 CHICKEN_CLASS = "chicken"
+COW_LUMPY_CLASS = "cow_lumpy"
+SHEEP_WOOL_CLASS = "sheep_wool"
+CORN_CLASS = "corn"
+HAY_CLASSES = {"round hay", "square hay"}
+HAY_MIN_COUNT_PER_IMAGE = 3
+CORN_MIN_COUNT_PER_IMAGE = 3
+
+# Temporal stability for non-critical messages (anti-flicker)
+VISION_STAB_WINDOW = 10  # frames
+VISION_STAB_HAY_LOW_MIN_TRUE = 7
+VISION_STAB_CORN_LOW_MIN_TRUE = 7
+VISION_STAB_COW_LUMPY_WINDOW = 5
+VISION_STAB_COW_LUMPY_MIN_TRUE = 3
+VISION_STAB_SHEEP_WOOL_WINDOW = 4
+VISION_STAB_SHEEP_WOOL_MIN_TRUE = 2
 
 RE_L = re.compile(r"\bL:(\d+)\b")
 RE_F = re.compile(r"\bF:(\d+)\b")
@@ -419,6 +455,9 @@ class VideoInferenceThread(QtCore.QThread):
                 chicken_dets: list[tuple[float, float]] = []
                 fire = False
                 predator = False
+                counts: dict[str, int] = {}
+                frame_h, frame_w = frame.shape[:2]
+                frame_area = float(frame_w * frame_h) if frame_w and frame_h else 1.0
 
                 if r.boxes is not None and len(r.boxes) > 0:
                     try:
@@ -443,6 +482,41 @@ class VideoInferenceThread(QtCore.QThread):
                             if label in PREDATOR_CLASSES:
                                 predator = True
 
+                        # Counting/message stream uses stricter filters (per-class conf, bbox size, ROI)
+                        need_conf = float(VISION_CONF_BY_CLASS.get(label, self._conf_alert))
+                        if c < need_conf:
+                            continue
+                        try:
+                            x1, y1, x2, y2 = xyxy
+                            x1f, y1f, x2f, y2f = float(x1), float(y1), float(x2), float(y2)
+                        except Exception:
+                            continue
+                        # Clamp
+                        x1f = max(0.0, min(x1f, float(frame_w)))
+                        x2f = max(0.0, min(x2f, float(frame_w)))
+                        y1f = max(0.0, min(y1f, float(frame_h)))
+                        y2f = max(0.0, min(y2f, float(frame_h)))
+                        bw = max(0.0, x2f - x1f)
+                        bh = max(0.0, y2f - y1f)
+                        if bw <= 1.0 or bh <= 1.0:
+                            continue
+                        # ROI border ignore
+                        cx = (x1f + x2f) / 2.0
+                        cy = (y1f + y2f) / 2.0
+                        if (
+                            cx < (VISION_ROI_BORDER_FRAC_X * frame_w)
+                            or cx > ((1.0 - VISION_ROI_BORDER_FRAC_X) * frame_w)
+                            or cy < (VISION_ROI_BORDER_FRAC_Y * frame_h)
+                            or cy > ((1.0 - VISION_ROI_BORDER_FRAC_Y) * frame_h)
+                        ):
+                            continue
+                        # Min area ratio per class
+                        min_ratio = float(VISION_MIN_AREA_RATIO_BY_CLASS.get(label, 0.0))
+                        if ((bw * bh) / frame_area) < min_ratio:
+                            continue
+
+                        counts[label] = counts.get(label, 0) + 1
+
                 # Update chicken tracker to stabilize counting
                 chicken = self._update_chicken_tracks(chicken_dets)
 
@@ -456,6 +530,7 @@ class VideoInferenceThread(QtCore.QThread):
                         "chicken": chicken,
                         "fire": fire,
                         "predator": predator,
+                        "counts": counts,
                     }
                 )
         finally:
@@ -841,6 +916,10 @@ class App(QtWidgets.QMainWindow):
         self._video_thread: VideoInferenceThread | None = None
         self._vision_frame_buf = deque(maxlen=400)  # (ts, bgr)
         self._last_qimg: QImage | None = None
+        self._vision_counts: dict[str, int] = {}
+        self._vision_last_msg: dict[str, float] = {}
+        self._vision_reco_lines: list[str] = []
+        self._vision_counts_hist = deque(maxlen=VISION_STAB_WINDOW)
 
         self.reader = SerialReader(port, baud, self)
         self.reader.sample.connect(self.on_sample)
@@ -999,6 +1078,8 @@ class App(QtWidgets.QMainWindow):
         self._vision_chicken_recent.append(int(s.get("chicken", 0)))
         self._vision_fire = bool(s.get("fire", False))
         self._vision_predator = bool(s.get("predator", False))
+        self._vision_counts = dict(s.get("counts", {}) or {})
+        self._vision_counts_hist.append(self._vision_counts)
 
         now = time.time()
         above = self._vision_fire or self._vision_predator
@@ -1016,6 +1097,80 @@ class App(QtWidgets.QMainWindow):
         else:
             self._vision_above_since = None
             self._vision_alarm_active = False
+
+        # Non-critical vision messages (rate-limited)
+        self._emit_vision_messages(now)
+        self._vision_reco_lines = self._compute_vision_recommendations()
+
+    def _emit_vision_messages(self, now: float) -> None:
+        def cooldown_ok(key: str, seconds: float) -> bool:
+            last = float(self._vision_last_msg.get(key, 0.0))
+            return (now - last) >= seconds
+
+        cow_lumpy_present = self._stable_presence(COW_LUMPY_CLASS, VISION_STAB_COW_LUMPY_WINDOW, VISION_STAB_COW_LUMPY_MIN_TRUE)
+        if cow_lumpy_present and cooldown_ok("cow_lumpy", 20.0):
+            self._vision_last_msg["cow_lumpy"] = now
+            self.log_event('VISION: Возможно зарожение (cow_lumpy).')
+
+        sheep_present = self._stable_presence(SHEEP_WOOL_CLASS, VISION_STAB_SHEEP_WOOL_WINDOW, VISION_STAB_SHEEP_WOOL_MIN_TRUE)
+        if sheep_present and cooldown_ok("sheep_wool", 25.0):
+            self._vision_last_msg["sheep_wool"] = now
+            self.log_event('VISION: Время стрижки овец (sheep_wool).')
+
+        hay_low = self._stable_hay_low()
+        if hay_low and cooldown_ok("hay_low", 30.0):
+            self._vision_last_msg["hay_low"] = now
+            self.log_event("VISION: Пополните запасы сена.")
+
+        corn_low = self._stable_corn_low()
+        if corn_low and cooldown_ok("corn_low", 30.0):
+            self._vision_last_msg["corn_low"] = now
+            self.log_event("VISION: пополните запасы пшена.")
+
+    def _stable_presence(self, cls: str, window: int, min_true: int) -> bool:
+        if window <= 0 or min_true <= 0:
+            return False
+        hist = list(self._vision_counts_hist)[-window:]
+        if len(hist) < window:
+            return False
+        trues = sum(1 for d in hist if int(d.get(cls, 0)) > 0)
+        return trues >= min_true
+
+    def _stable_hay_low(self) -> bool:
+        hist = list(self._vision_counts_hist)
+        if len(hist) < VISION_STAB_WINDOW:
+            return False
+        def is_low(d: dict[str, int]) -> bool:
+            total = sum(int(d.get(c, 0)) for c in HAY_CLASSES)
+            return 0 < total < HAY_MIN_COUNT_PER_IMAGE
+        trues = sum(1 for d in hist if is_low(d))
+        return trues >= VISION_STAB_HAY_LOW_MIN_TRUE
+
+    def _stable_corn_low(self) -> bool:
+        hist = list(self._vision_counts_hist)
+        if len(hist) < VISION_STAB_WINDOW:
+            return False
+        def is_low(d: dict[str, int]) -> bool:
+            c = int(d.get(CORN_CLASS, 0))
+            return 0 < c < CORN_MIN_COUNT_PER_IMAGE
+        trues = sum(1 for d in hist if is_low(d))
+        return trues >= VISION_STAB_CORN_LOW_MIN_TRUE
+
+    def _compute_vision_recommendations(self) -> list[str]:
+        lines: list[str] = []
+        if self._stable_presence(COW_LUMPY_CLASS, VISION_STAB_COW_LUMPY_WINDOW, VISION_STAB_COW_LUMPY_MIN_TRUE):
+            lines.append('Возможно зарожение')
+
+        if self._stable_presence(SHEEP_WOOL_CLASS, VISION_STAB_SHEEP_WOOL_WINDOW, VISION_STAB_SHEEP_WOOL_MIN_TRUE):
+            lines.append('Время стрижки овец')
+
+        if self._stable_hay_low():
+            lines.append("Пополните запасы сена")
+
+        if self._stable_corn_low():
+            lines.append("пополните запасы пшена")
+
+        return lines
 
     def apply_vision_settings(self):
         self.log_event(
@@ -1240,9 +1395,12 @@ class App(QtWidgets.QMainWindow):
         else:
             self.banner.setText("СТАТУС: НОРМА")
             self.banner.setStyleSheet(css_banner("#198754"))
-            self.advice.setText(
-                "Система работает. Следи за «Огонь/дым» и «Наклон» — это самые критичные события."
-            )
+            base = "Система работает. Следи за «Огонь/дым» и «Наклон» — это самые критичные события."
+            if self._vision_reco_lines:
+                extra = "\n\nVISION:\n" + "\n".join(f"- {t}" for t in self._vision_reco_lines)
+                self.advice.setText(base + extra)
+            else:
+                self.advice.setText(base)
 
         # Vision beep + popup until acknowledged
         if self._vision_alarm_active and not self._vision_alarm_ack and (now - self._vision_last_beep) > 1.0:
