@@ -1,3 +1,4 @@
+import os
 import re
 import sys
 import time
@@ -23,7 +24,8 @@ import pyqtgraph as pg
 
 
 # Serial settings (sketch_apr27b.ino)
-PORT = "COM7"
+# On Raspberry Pi / Linux use e.g. /dev/ttyACM0 (Arduino) or set SERIAL_PORT.
+PORT = os.environ.get("SERIAL_PORT", "COM7" if sys.platform == "win32" else "/dev/ttyACM0")
 BAUD = 9600
 
 # Plot settings
