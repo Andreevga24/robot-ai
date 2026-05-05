@@ -83,35 +83,42 @@ def main() -> int:
     model = YOLO(str(model_path))
     frame_count = 0
 
-    print("Press 'q' in the preview window to stop.")
-    while True:
-        ok, frame = cap.read()
-        if not ok:
-            break
-
-        result = model.predict(
-            source=frame,
-            conf=args.conf,
-            imgsz=args.imgsz,
-            device=args.device,
-            verbose=False,
-        )[0]
-        annotated = result.plot()
-        frame_count += 1
-
-        if out_writer is not None:
-            out_writer.write(annotated)
-
-        if args.show:
-            cv2.imshow("YOLO Webcam Detection", annotated)
-            if cv2.waitKey(1) & 0xFF == ord("q"):
+    print("Press 'q' in the preview window to stop (focus must be on that window).")
+    try:
+        while True:
+            ok, frame = cap.read()
+            if not ok:
                 break
 
-    cap.release()
-    if out_writer is not None:
-        out_writer.release()
-    if args.show:
-        cv2.destroyAllWindows()
+            result = model.predict(
+                source=frame,
+                conf=args.conf,
+                imgsz=args.imgsz,
+                device=args.device,
+                verbose=False,
+            )[0]
+            annotated = result.plot()
+            frame_count += 1
+
+            if out_writer is not None:
+                out_writer.write(annotated)
+
+            if args.show:
+                cv2.imshow("YOLO Webcam Detection", annotated)
+                # Closing the window with the mouse often needs waitKey to register.
+                if cv2.waitKey(1) & 0xFF == ord("q"):
+                    break
+                try:
+                    if cv2.getWindowProperty("YOLO Webcam Detection", cv2.WND_PROP_VISIBLE) < 1:
+                        break
+                except Exception:
+                    pass
+    finally:
+        cap.release()
+        if out_writer is not None:
+            out_writer.release()
+        if args.show:
+            cv2.destroyAllWindows()
 
     print(f"Frames processed: {frame_count}")
     if out_path is not None:

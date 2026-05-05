@@ -1,5 +1,6 @@
 import os
 import re
+import socket
 import sys
 import time
 from collections import deque
@@ -25,12 +26,50 @@ import pyqtgraph as pg
 
 # Serial settings (sketch_apr27b.ino)
 # On Raspberry Pi / Linux use e.g. /dev/ttyACM0 (Arduino) or set SERIAL_PORT.
-PORT = os.environ.get("SERIAL_PORT", "COM7" if sys.platform == "win32" else "/dev/ttyACM0")
+# On PC: receive Arduino forwarded from Raspberry Pi via TCP — set SERIAL_TCP=pi_host:5001
+# (see README / socat one-liner on the Pi).
+
+
+def _serial_port_default() -> str:
+    raw = os.environ.get("SERIAL_PORT", "").strip()
+    if raw and not (
+        sys.platform != "win32" and re.match(r"(?i)^COM\d+$", raw)
+    ):
+        return raw
+    if sys.platform == "win32":
+        return "COM7"
+    # Linux/Pi: prefer CH340/COM-style adapters (ttyUSB0), then CDC ACM (ttyACM0).
+    if Path("/dev/ttyUSB0").exists():
+        return "/dev/ttyUSB0"
+    if Path("/dev/ttyACM0").exists():
+        return "/dev/ttyACM0"
+    return "/dev/ttyACM0"
+
+
+PORT = _serial_port_default()
 BAUD = 9600
+
+
+def _parse_serial_tcp_endpoint() -> tuple[str, int] | None:
+    raw = os.environ.get("SERIAL_TCP", "").strip()
+    if not raw:
+        return None
+    host, sep, port_s = raw.rpartition(":")
+    if not sep or not port_s.isdigit():
+        print("SERIAL_TCP must be host:port (example: 192.168.1.50:5001)", file=sys.stderr)
+        sys.exit(2)
+    return (host.strip(), int(port_s))
 
 # Plot settings
 MAX_POINTS = 500
 STALE_AFTER_SECONDS = 3.0
+
+
+def stale_after_seconds() -> float:
+    """USB serial: short stale window. TCP from Pi: longer — Wi‑Fi/socat reconnect may pause ~10–20s."""
+    if "SERIAL_STALE_SECONDS" in os.environ:
+        return float(os.environ["SERIAL_STALE_SECONDS"])
+    return 35.0 if os.environ.get("SERIAL_TCP", "").strip() else STALE_AFTER_SECONDS
 
 DATA_DIR = Path("data_logs")
 
@@ -54,13 +93,28 @@ GUARD_DY_ALARM_DEG = 15
 MAX_EVENT_MARKERS_PER_PLOT = 60
 
 # Vision (YOLO) settings
-VISION_SOURCE = "0"  # "0" for default camera
+VISION_SOURCE = os.environ.get("VISION_SOURCE", "0").strip() or "0"  # "1" second webcam, etc.
+
+
+def _vision_source_default_index() -> int:
+    """USB camera index for UI default; non-numeric VISION_SOURCE (e.g. URL) -> 0."""
+    try:
+        return max(0, min(int(str(VISION_SOURCE).strip()), 15))
+    except ValueError:
+        return 0
+
+
 VISION_IMGSZ = 640
 VISION_DEVICE = "cpu"
 VISION_MODEL_PATH = (Path(__file__).resolve().parent / "runs/detect/train_updated_115/weights/best.pt")
 VISION_CONF_ALERT = 0.40
 VISION_CONF_CHICKEN = 0.30
 VISION_ALARM_HOLD_SECONDS = 0.40  # require persistence to reduce false positives
+# Raspberry Pi: seconds to sleep after each YOLO frame — frees CPU/USB for Trackduino serial (e.g. 0.04).
+VISION_LOOP_TAIL_SLEEP = float(os.environ.get("VISION_LOOP_TAIL_SLEEP", "0"))
+
+# Set to "0" to disable camera/YOLO (useful on low-power devices or if native libs crash).
+VISION_ENABLED = os.environ.get("VISION_ENABLED", "1").strip() not in {"0", "false", "False", "no", "NO"}
 
 # Vision anti-false-positive filters
 # - Class-specific confidence thresholds (override VISION_CONF_ALERT for counting/messages)
@@ -364,6 +418,123 @@ class SerialReader(QtCore.QThread):
                 pass
 
 
+class TcpSerialReader(QtCore.QThread):
+    """Read the same line protocol as SerialReader, but from a TCP socket (Pi bridge -> PC)."""
+
+    sample = QtCore.pyqtSignal(float, int, int, int, int, int)
+    status = QtCore.pyqtSignal(str)
+    traffic = QtCore.pyqtSignal()  # any payload received on TCP (link still carrying bytes)
+
+    @staticmethod
+    def _shutdown_socket(sock: socket.socket) -> None:
+        """Avoid rude RST on Windows when reconnecting — reduces socat 'Connection reset by peer' on Pi."""
+        try:
+            sock.shutdown(socket.SHUT_RDWR)
+        except OSError:
+            pass
+        try:
+            sock.close()
+        except OSError:
+            pass
+
+    def __init__(self, host: str, tcp_port: int, parent=None):
+        super().__init__(parent)
+        self._host = host
+        self._tcp_port = tcp_port
+        self._stop = False
+
+    def stop(self):
+        self._stop = True
+
+    def run(self):
+        t0 = time.time()
+        last = {"L": 0, "F": 0, "X": 0, "Y": 0, "Z": 0}
+        reconnect_delay = float(os.environ.get("SERIAL_TCP_RECONNECT_DELAY", "2.0"))
+        recv_timeout = float(os.environ.get("SERIAL_TCP_RECV_TIMEOUT", "3.0"))
+        reconnect_attempt = 0
+
+        while not self._stop:
+            sock: socket.socket | None = None
+            buf = b""
+            try:
+                sock = socket.create_connection((self._host, self._tcp_port), timeout=15)
+                reconnect_attempt = 0
+                try:
+                    sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                except (OSError, AttributeError):
+                    pass
+                try:
+                    sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+                except OSError:
+                    pass
+                sock.settimeout(recv_timeout)
+                self.status.emit(f"TCP connected: {self._host}:{self._tcp_port}")
+
+                recv_idle_timeouts = 0
+                while not self._stop:
+                    try:
+                        chunk = sock.recv(8192)
+                    except socket.timeout:
+                        recv_idle_timeouts += 1
+                        # Link may be up but USB/Arduino on Pi side is quiet — helps distinguish from Wi‑Fi drop.
+                        if recv_idle_timeouts == 1:
+                            self.status.emit("TCP: жду данные с USB на Pi…")
+                        elif recv_idle_timeouts in (5, 15, 30, 60):
+                            self.status.emit(
+                                f"TCP: нет payload с Pi (~{recv_idle_timeouts * recv_timeout:.0f}s recv timeout)"
+                            )
+                        continue
+                    except OSError as e:
+                        self.status.emit(f"TCP read error: {e}")
+                        break
+                    if not chunk:
+                        self.status.emit("TCP: connection closed by peer")
+                        break
+                    recv_idle_timeouts = 0
+                    self.traffic.emit()
+                    buf += chunk
+                    while b"\n" in buf:
+                        line, buf = buf.split(b"\n", 1)
+                        raw = line.decode(errors="ignore").strip()
+                        if not raw:
+                            continue
+
+                        m = RE_L.search(raw)
+                        if m:
+                            last["L"] = int(m.group(1))
+                        m = RE_F.search(raw)
+                        if m:
+                            last["F"] = int(m.group(1))
+                        m = RE_X.search(raw)
+                        if m:
+                            last["X"] = int(m.group(1))
+                        m = RE_Y.search(raw)
+                        if m:
+                            last["Y"] = int(m.group(1))
+                        m = RE_Z.search(raw)
+                        if m:
+                            last["Z"] = int(m.group(1))
+
+                        t = time.time() - t0
+                        self.sample.emit(t, last["L"], last["F"], last["X"], last["Y"], last["Z"])
+            except Exception as e:
+                if not self._stop:
+                    self.status.emit(f"TCP error: {e}")
+            finally:
+                if sock is not None:
+                    self._shutdown_socket(sock)
+
+            if self._stop:
+                break
+            close_grace = float(os.environ.get("SERIAL_TCP_CLOSE_GRACE_MS", "150")) / 1000.0
+            if close_grace > 0:
+                time.sleep(close_grace)
+            pause = min(45.0, reconnect_delay * (2 ** reconnect_attempt))
+            reconnect_attempt = min(reconnect_attempt + 1, 8)
+            self.status.emit(f"TCP: reconnect in {pause:.0f}s…")
+            time.sleep(pause)
+
+
 class VideoInferenceThread(QtCore.QThread):
     frame = QtCore.pyqtSignal(object)  # QImage
     frame_bgr = QtCore.pyqtSignal(object)  # dict: {ts: float, bgr: np.ndarray}
@@ -438,6 +609,9 @@ class VideoInferenceThread(QtCore.QThread):
                 if not ok:
                     time.sleep(0.05)
                     continue
+
+                if self._stop:
+                    break
 
                 try:
                     r = model.predict(
@@ -535,6 +709,8 @@ class VideoInferenceThread(QtCore.QThread):
                         "counts": counts,
                     }
                 )
+                if VISION_LOOP_TAIL_SLEEP > 0:
+                    time.sleep(VISION_LOOP_TAIL_SLEEP)
         finally:
             try:
                 cap.release()
@@ -603,7 +779,7 @@ class VideoInferenceThread(QtCore.QThread):
 
 
 class App(QtWidgets.QMainWindow):
-    def __init__(self, port: str, baud: int):
+    def __init__(self, port: str, baud: int, serial_tcp: tuple[str, int] | None = None):
         super().__init__()
         self.setWindowTitle("Робот в хлеву — панель мониторинга")
 
@@ -691,8 +867,21 @@ class App(QtWidgets.QMainWindow):
         cam_layout.addLayout(cam_controls)
 
         self.chk_cam_autostart = QtWidgets.QCheckBox("Автостарт")
-        self.chk_cam_autostart.setChecked(True)
+        # Serial over TCP from Pi: local PC webcam autostart often fails (MSMF) or is irrelevant.
+        self.chk_cam_autostart.setChecked(serial_tcp is None)
         cam_controls.addWidget(self.chk_cam_autostart)
+
+        cam_controls.addSpacing(12)
+
+        cam_controls.addWidget(QtWidgets.QLabel("Камера №"))
+        self.spin_cam_index = QtWidgets.QSpinBox()
+        self.spin_cam_index.setRange(0, 15)
+        self.spin_cam_index.setValue(_vision_source_default_index())
+        self.spin_cam_index.setToolTip(
+            "Индекс USB-камеры для OpenCV: 0 — первая в системе, 1 — вторая, … "
+            "Если картинка не та — смените номер и нажмите «Стоп камера», затем «Старт камеры»."
+        )
+        cam_controls.addWidget(self.spin_cam_index)
 
         cam_controls.addSpacing(12)
 
@@ -822,7 +1011,12 @@ class App(QtWidgets.QMainWindow):
         dash_layout.addLayout(info)
         self.lbl_last_update = QtWidgets.QLabel("Последнее обновление: —")
         info.addWidget(self.lbl_last_update, 1)
-        self.lbl_port = QtWidgets.QLabel(f"Связь: {port} @ {baud}")
+        if serial_tcp:
+            h, p = serial_tcp
+            link = f"TCP {h}:{p} (Arduino на Raspberry Pi)"
+        else:
+            link = f"{port} @ {baud}"
+        self.lbl_port = QtWidgets.QLabel(f"Связь: {link}")
         info.addWidget(self.lbl_port)
 
         self.card_advice = QtWidgets.QGroupBox("Что делать сейчас")
@@ -868,6 +1062,11 @@ class App(QtWidgets.QMainWindow):
         self.legend.addItem(self.curve_Z, "Z")
         graphs_layout.addWidget(self.plot_accel, 1)
 
+        # Fixed Y scales so small sensor values stay visible (default auto-range can look "empty").
+        self.plot_light.setYRange(0, 1023, padding=0.02)
+        self.plot_flame.setYRange(0, 512, padding=0.02)
+        self.plot_accel.setYRange(-90, 90, padding=0.02)
+
         # History UI
         hist_top = QtWidgets.QHBoxLayout()
         hist_layout.addLayout(hist_top)
@@ -900,6 +1099,11 @@ class App(QtWidgets.QMainWindow):
         self._last_beep = 0.0
         self._latest: Sample | None = None
         self._last_rx_wall = 0.0
+        self._serial_tcp_ep: tuple[str, int] | None = serial_tcp
+        self._uses_tcp_serial = serial_tcp is not None
+        self._last_tcp_traffic_wall = 0.0
+        self._closing = False
+        self._stale_episode_logged = False
         self._last_fire_popup = 0.0
         self._last_accel_popup = 0.0
         self._guard_enabled = False
@@ -923,9 +1127,16 @@ class App(QtWidgets.QMainWindow):
         self._vision_reco_lines: list[str] = []
         self._vision_counts_hist = deque(maxlen=VISION_STAB_WINDOW)
 
-        self.reader = SerialReader(port, baud, self)
+        self.reader = (
+            TcpSerialReader(serial_tcp[0], serial_tcp[1], self)
+            if serial_tcp
+            else SerialReader(port, baud, self)
+        )
         self.reader.sample.connect(self.on_sample)
         self.reader.status.connect(self.status_label.setText)
+        if serial_tcp is not None:
+            self.reader.traffic.connect(self._on_tcp_traffic)
+            self.reader.finished.connect(self._on_tcp_reader_finished)
         self.reader.start()
 
         self.ui_timer = QtCore.QTimer(self)
@@ -939,6 +1150,9 @@ class App(QtWidgets.QMainWindow):
             QtCore.QTimer.singleShot(200, lambda: self.toggle_camera(force_on=True))
 
     def refresh_camera_status(self):
+        if not VISION_ENABLED:
+            self.cam_status.setText("Камера: отключена (VISION_ENABLED=0).")
+            return
         if cv2 is None or YOLO is None:
             msg = "Камера: YOLO недоступен."
             if "_VISION_IMPORT_ERROR" in globals() and _VISION_IMPORT_ERROR:
@@ -950,7 +1164,35 @@ class App(QtWidgets.QMainWindow):
         if not VISION_MODEL_PATH.is_file():
             self.cam_status.setText(f"YOLO: не найден файл модели: {VISION_MODEL_PATH}")
             return
-        self.cam_status.setText(f"Камера готова. Модель: {VISION_MODEL_PATH.name}, source={VISION_SOURCE}")
+        self.cam_status.setText(
+            f"Камера готова. Модель: {VISION_MODEL_PATH.name}, индекс={self.spin_cam_index.value()}"
+        )
+
+    @QtCore.pyqtSlot()
+    def _on_tcp_traffic(self):
+        self._last_tcp_traffic_wall = time.time()
+
+    @QtCore.pyqtSlot()
+    def _on_tcp_reader_finished(self):
+        if self._closing or self._serial_tcp_ep is None:
+            return
+        self.log_event("TCP: поток приёма завершился — перезапуск через 1 с.")
+        QtCore.QTimer.singleShot(1000, self._restart_tcp_reader)
+
+    def _restart_tcp_reader(self):
+        if self._closing or self._serial_tcp_ep is None:
+            return
+        host, port = self._serial_tcp_ep
+        try:
+            self.reader = TcpSerialReader(host, port, self)
+            self.reader.sample.connect(self.on_sample)
+            self.reader.status.connect(self.status_label.setText)
+            self.reader.traffic.connect(self._on_tcp_traffic)
+            self.reader.finished.connect(self._on_tcp_reader_finished)
+            self.reader.start()
+            self.log_event("TCP: поток приёма перезапущен.")
+        except Exception as e:
+            self.log_event(f"TCP: не удалось перезапустить поток: {e}")
 
     @QtCore.pyqtSlot(float, int, int, int, int, int)
     def on_sample(self, t, L, F, X, Y, Z):
@@ -964,6 +1206,7 @@ class App(QtWidgets.QMainWindow):
         s = Sample(t=t, L=L, F=F, X=X, Y=Y, Z=Z)
         self._latest = s
         self._last_rx_wall = time.time()
+        self._stale_episode_logged = False
         try:
             append_csv_row(s)
         except Exception:
@@ -994,7 +1237,34 @@ class App(QtWidgets.QMainWindow):
         if self._vision_alarm_active:
             self.log_event("VISION-тревога подтверждена оператором.")
 
+    def _stop_video_thread(self, timeout_ms: int = 8000) -> None:
+        """Stop vision thread and release the camera; disconnect signals first so close/stop is responsive."""
+        t = self._video_thread
+        if t is None:
+            return
+        for sig in (t.frame, t.frame_bgr, t.summary, t.status):
+            try:
+                sig.disconnect()
+            except TypeError:
+                pass
+        self.video.clear()
+        self.video.setText("Видео остановлено.")
+        t.stop()
+        if not t.wait(timeout_ms):
+            t.terminate()
+            t.wait(500)
+        self._video_thread = None
+
     def toggle_camera(self, force_on: bool = False):
+        if not VISION_ENABLED:
+            self.cam_status.setText("Камера: отключена (VISION_ENABLED=0).")
+            QtWidgets.QMessageBox.information(
+                self,
+                "Камера отключена",
+                "Камера/YOLO отключены переменной окружения.\n\n"
+                "Чтобы включить, убери VISION_ENABLED=0 и запусти снова.",
+            )
+            return
         want_on = force_on or self._video_thread is None
         if want_on:
             self.log_event("Камера: запуск…")
@@ -1024,7 +1294,7 @@ class App(QtWidgets.QMainWindow):
             self.cam_status.setText("Камера: запускаю поток…")
             self._video_thread = VideoInferenceThread(
                 model_path=VISION_MODEL_PATH,
-                source=VISION_SOURCE,
+                source=str(self.spin_cam_index.value()),
                 conf_alert=float(self.spin_conf_alert.value()),
                 conf_chicken=float(self.spin_conf_chicken.value()),
                 imgsz=VISION_IMGSZ,
@@ -1039,16 +1309,11 @@ class App(QtWidgets.QMainWindow):
             self.btn_cam_toggle.setText("Стоп камера")
             self.video.setText("Запуск…")
         else:
-            try:
-                if self._video_thread is not None:
-                    self.log_event("Камера: остановка…")
-                    self._video_thread.stop()
-                    self._video_thread.wait(1500)
-            finally:
-                self._video_thread = None
-                self.btn_cam_toggle.setText("Старт камеры")
-                self.video.setText("Видео остановлено.")
-                self.refresh_camera_status()
+            if self._video_thread is not None:
+                self.log_event("Камера: остановка…")
+            self._stop_video_thread()
+            self.btn_cam_toggle.setText("Старт камеры")
+            self.refresh_camera_status()
 
     @QtCore.pyqtSlot(object)
     def on_video_frame(self, qimg: QImage):
@@ -1176,7 +1441,8 @@ class App(QtWidgets.QMainWindow):
 
     def apply_vision_settings(self):
         self.log_event(
-            f"VISION: применены настройки: conf_alert={self.spin_conf_alert.value():.2f}, "
+            f"VISION: применены настройки: камера №{self.spin_cam_index.value()}, "
+            f"conf_alert={self.spin_conf_alert.value():.2f}, "
             f"conf_chicken={self.spin_conf_chicken.value():.2f}, hold={self.spin_hold.value():.1f}s"
         )
         # Settings are applied on next camera start. Restart if currently running.
@@ -1362,14 +1628,60 @@ class App(QtWidgets.QMainWindow):
             self.cam_alarm.setStyleSheet(css_vision_alarm("#198754"))
 
         # Priority: serial stale -> vision fire -> vision predator -> sensor fire -> normal
-        if self._last_rx_wall and (now - self._last_rx_wall) > STALE_AFTER_SECONDS:
-            self.banner.setText("НЕТ ДАННЫХ — проверь питание/кабель/COM-порт")
-            self.banner.setStyleSheet(css_banner("#6c757d"))
-            self.advice.setText(
-                "1) Проверь USB-кабель и питание платы.\n"
-                "2) Убедись, что COM-порт не занят (Serial Monitor должен быть закрыт).\n"
-                "3) Если не помогло — переподключи кабель."
-            )
+        stale_s = stale_after_seconds()
+        tcp_traffic_grace = max(12.0, stale_s * 0.45)
+        tcp_bytes_recent = (
+            self._uses_tcp_serial
+            and self._last_tcp_traffic_wall > 0
+            and (now - self._last_tcp_traffic_wall) < tcp_traffic_grace
+        )
+        if self._last_rx_wall and (now - self._last_rx_wall) > stale_s:
+            if self._uses_tcp_serial and not self._stale_episode_logged:
+                age_rx = now - self._last_rx_wall
+                age_tcp = (
+                    (now - self._last_tcp_traffic_wall) if self._last_tcp_traffic_wall else -1.0
+                )
+                self.log_event(
+                    f"Нет строк датчиков >{stale_s:.0f}s (факт {age_rx:.0f}s). "
+                    f"Последний TCP payload: {age_tcp:.0f}s назад. "
+                    f"Смотри статус строкой выше (TCP/USB/Wi‑Fi)."
+                )
+                self._stale_episode_logged = True
+            if self._uses_tcp_serial and tcp_bytes_recent:
+                self.banner.setText("НЕТ СТРОК ДАТЧИКОВ — по TCP приходят байты, но нет строк L:|F:")
+                self.banner.setStyleSheet(css_banner("#6c757d"))
+                self.advice.setText(
+                    "Проверь, что Trackduino шлёт строки с переводом строки (\\n). "
+                    "На Pi: socat должен читать тот же порт, что даёт данные (например /dev/ttyUSB0)."
+                )
+            elif self._uses_tcp_serial:
+                self.banner.setText("НЕТ ДАННЫХ — проверь Wi‑Fi / Raspberry Pi / socat")
+                self.banner.setStyleSheet(css_banner("#6c757d"))
+                self.advice.setText(
+                    "1) На Pi: процесс socat ещё работает? Перезапусти мост к /dev/ttyUSB0.\n"
+                    "2) Отключи энергосбережение Wi‑Fi на Pi: sudo iw dev wlan0 set power_save off\n"
+                    "3) Сеть ПК↔Pi: пинг; клиент TCP переподключится с паузой (смотри статус вверху)."
+                )
+            else:
+                if sys.platform == "win32":
+                    self.banner.setText("НЕТ ДАННЫХ — проверь питание/кабель/COM-порт")
+                    self.advice.setText(
+                        "1) Проверь USB-кабель и питание платы.\n"
+                        "2) Убедись, что COM-порт не занят (Serial Monitor должен быть закрыт).\n"
+                        "3) Если не помогло — переподключи кабель."
+                    )
+                else:
+                    self.banner.setText(
+                        "НЕТ ДАННЫХ — проверь USB, питание Trackduino и переменную SERIAL_PORT"
+                    )
+                    self.advice.setText(
+                        "1) На Pi: ls /dev/ttyUSB* /dev/ttyACM* и задай правильный порт: "
+                        "export SERIAL_PORT=/dev/ttyUSB0\n"
+                        "2) Закрой всё, что держит порт (Arduino IDE Serial Monitor, второй socat).\n"
+                        "3) Проверь поток: закрой панель и выполни timeout 3 cat $SERIAL_PORT\n"
+                        "4) Группа dialout: sudo usermod -a -G dialout $USER и перелогинься."
+                    )
+                self.banner.setStyleSheet(css_banner("#6c757d"))
         elif self._vision_alarm_active and not self._vision_alarm_ack and self._vision_fire:
             self.banner.setText("ПОЖАР (VISION) — действуй немедленно!")
             self.banner.setStyleSheet(css_banner("#dc3545"))
@@ -1509,11 +1821,10 @@ class App(QtWidgets.QMainWindow):
         self.status_label.setText(f"История загружена: {len(xs)} точек ({text}).")
 
     def closeEvent(self, event):
+        self._closing = True
         try:
             try:
-                if self._video_thread is not None:
-                    self._video_thread.stop()
-                    self._video_thread.wait(1500)
+                self._stop_video_thread()
             except Exception:
                 pass
             self.reader.stop()
@@ -1522,10 +1833,25 @@ class App(QtWidgets.QMainWindow):
             super().closeEvent(event)
 
 
+def _crash_hook(exc_type, exc, tb):
+    try:
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        import traceback
+
+        path = DATA_DIR / "last_crash.txt"
+        with open(path, "w", encoding="utf-8") as f:
+            traceback.print_exception(exc_type, exc, tb, file=f)
+    except Exception:
+        pass
+    sys.__excepthook__(exc_type, exc, tb)
+
+
 def main():
+    sys.excepthook = _crash_hook
     app = QtWidgets.QApplication(sys.argv)
     app.setApplicationDisplayName("Робот в хлеву")
-    win = App(PORT, BAUD)
+    tcp_ep = _parse_serial_tcp_endpoint()
+    win = App(PORT, BAUD, tcp_ep)
     win.resize(1100, 800)
     win.show()
     sys.exit(app.exec())
